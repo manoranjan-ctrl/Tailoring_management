@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details & Design Specification - TailorCraft</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <span class="section-kicker">Order Specification</span>
+                <h1 class="page-title" id="order-title">Tailoring Job #---</h1>
+                <p class="page-subtitle" id="order-subtitle">Placed on -- &bull; Status: --</p>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <a href="orders.html" id="back-link" class="btn btn-outline btn-sm">&larr; Back to Orders</a>
+                <button onclick="window.print()" class="btn btn-outline btn-sm">&#128438; Print Work Order</button>
+            </div>
+        </div>
+
+        <!-- 7-Stage Tailoring Progress Stepper -->
+        <div class="panel" style="margin-bottom: 2rem;">
+            <div class="panel-header">
+                <h3 class="panel-title">Stitching Lifecycle & Tracking</h3>
+                <span id="current-status-badge" class="status-badge design_received">DESIGN RECEIVED</span>
+            </div>
+
+            <div class="status-tracker-wrap">
+                <div class="status-tracker" id="status-stepper">
+                    <div class="status-step" id="step-DESIGN_RECEIVED">
+                        <div class="step-dot">1</div>
+                        <span class="step-label">Design Received</span>
+                    </div>
+                    <div class="status-step" id="step-ORDER_ACCEPTED">
+                        <div class="step-dot">2</div>
+                        <span class="step-label">Order Accepted</span>
+                    </div>
+                    <div class="status-step" id="step-MEASUREMENTS_VERIFIED">
+                        <div class="step-dot">3</div>
+                        <span class="step-label">Measurements Verified</span>
+                    </div>
+                    <div class="status-step" id="step-IN_PRODUCTION">
+                        <div class="step-dot">4</div>
+                        <span class="step-label">In Production</span>
+                    </div>
+                    <div class="status-step" id="step-READY_FOR_TRIAL">
+                        <div class="step-dot">5</div>
+                        <span class="step-label">Ready for Trial</span>
+                    </div>
+                    <div class="status-step" id="step-READY_FOR_DELIVERY">
+                        <div class="step-dot">6</div>
+                        <span class="step-label">Ready for Delivery</span>
+                    </div>
+                    <div class="status-step" id="step-COMPLETED">
+                        <div class="step-dot">7</div>
+                        <span class="step-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="design-studio-grid">
+            <!-- Left: Design Specs & Measurements -->
+            <div>
+                <!-- Customization Spec Grid -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">&#9986; Garment Customization Specs</h3>
+                        <span class="garment-badge" id="spec-garment-badge">Garment</span>
+                    </div>
+
+                    <div class="order-specs-grid">
+                        <div class="spec-item">
+                            <span class="label">Garment Category</span>
+                            <span class="val" id="spec-garment">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="label">Fabric Color</span>
+                            <span class="val" id="spec-color">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="label">Collar Style</span>
+                            <span class="val" id="spec-collar">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="label">Sleeve Style</span>
+                            <span class="val" id="spec-sleeve">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="label">Pocket Style</span>
+                            <span class="val" id="spec-pocket">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="label">Tailoring Price</span>
+                            <span class="val" style="color:var(--navy-dark);" id="spec-price">&#8377; -</span>
+                        </div>
+                    </div>
+
+                    <!-- Special Instructions -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <h4 style="font-size:0.92rem; margin-bottom:0.4rem; color:var(--navy-dark);">Customer Special Instructions:</h4>
+                        <div id="spec-instructions" style="background:var(--cream-subtle); padding:0.9rem; border-radius:4px; font-size:0.88rem; color:var(--text-secondary); border:1px solid var(--cream-border);">
+                            No special instructions provided.
+                        </div>
+                    </div>
+
+                    <!-- Master Tailor Internal Notes -->
+                    <div>
+                        <h4 style="font-size:0.92rem; margin-bottom:0.4rem; color:var(--navy-dark);">&#128221; Master Tailor Notes:</h4>
+                        <div id="master-notes-display" class="master-note-box">
+                            No master notes added yet.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Measurement Specifications -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">&#128207; Body Measurements (Inches)</h3>
+                    </div>
+
+                    <table class="measure-specs-table" style="max-width:480px;">
+                        <tr><td>Chest / Bust Circumference</td><td class="val" id="m-val-chest">-</td></tr>
+                        <tr><td>Shoulder Width</td><td class="val" id="m-val-shoulder">-</td></tr>
+                        <tr><td>Sleeve Length</td><td class="val" id="m-val-sleeve">-</td></tr>
+                        <tr><td>Waist Circumference</td><td class="val" id="m-val-waist">-</td></tr>
+                        <tr><td>Full Garment Length</td><td class="val" id="m-val-length">-</td></tr>
+                    </table>
+                </div>
+
+                <!-- Customer Details Card -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">&#128100; Client Contact Information</h3>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; font-size:0.9rem;">
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); display:block;">Customer Name</span>
+                            <strong id="cust-name">-</strong>
+                        </div>
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); display:block;">Email Address</span>
+                            <span id="cust-email">-</span>
+                        </div>
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); display:block;">Phone Number</span>
+                            <span id="cust-phone">-</span>
+                        </div>
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); display:block;">Customer ID</span>
+                            <span id="cust-id" style="font-family:monospace; color:var(--text-muted);">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Uploaded Reference Image & Master Action Controls -->
+            <div>
+                <!-- Uploaded Reference Image Card -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">&#128247; Uploaded Design Reference</h3>
+                    </div>
+                    <div style="text-align:center; padding:0.5rem 0;">
+                        <img id="design-img-tag" src="" style="max-width:100%; max-height:340px; border-radius:4px; border:1px solid var(--cream-border); object-fit:contain;" alt="No image uploaded">
+                        <p id="no-img-text" style="display:none; color:var(--text-muted); padding:2rem 1rem; font-size:0.9rem;">
+                            No reference sketch or image was attached to this order.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Master Tailor Workspace Action Panel (Visible to ADMIN) -->
+                <div id="master-action-panel" class="panel" style="border: 2px solid var(--gold-accent); display:none;">
+                    <div class="panel-header">
+                        <h3 class="panel-title">&#9881; Master Tailor Controls</h3>
+                        <span class="user-pill admin-pill">Master Only</span>
+                    </div>
+
+                    <!-- Quick Accept / Reject -->
+                    <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+                        <button onclick="quickUpdateStatus('ORDER_ACCEPTED')" class="btn btn-success btn-sm" style="flex:1;">&#10003; Accept Order</button>
+                        <button onclick="quickUpdateStatus('REJECTED')" class="btn btn-danger-outline btn-sm" style="flex:1;">&times; Reject Order</button>
+                    </div>
+
+                    <!-- Update Status Dropdown -->
+                    <div class="form-group">
+                        <label class="form-label" for="master-status-select">Advance Order Status</label>
+                        <select id="master-status-select" class="form-select" onchange="submitStatusChange(this.value)">
+                            <option value="DESIGN_RECEIVED">DESIGN RECEIVED</option>
+                            <option value="ORDER_ACCEPTED">ORDER ACCEPTED</option>
+                            <option value="MEASUREMENTS_VERIFIED">MEASUREMENTS VERIFIED</option>
+                            <option value="IN_PRODUCTION">IN PRODUCTION</option>
+                            <option value="READY_FOR_TRIAL">READY FOR TRIAL</option>
+                            <option value="READY_FOR_DELIVERY">READY FOR DELIVERY</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                    </div>
+
+                    <!-- Master Notes Editor -->
+                    <div class="form-group">
+                        <label class="form-label" for="master-notes-input">Add/Update Master Notes</label>
+                        <textarea id="master-notes-input" class="form-textarea" rows="3" placeholder="Add cutting notes, fabric details, or trial dates..."></textarea>
+                        <button type="button" onclick="saveMasterNotes()" class="btn btn-primary btn-sm btn-block" style="margin-top:0.5rem;">Save Master Notes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">TailorCraft &bull; Online Tailoring Management System</div>
+            <div class="footer-note">College Project &bull; Spring Boot + MongoDB</div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+        let currentOrder = null;
+        const STAGES = [
+            'DESIGN_RECEIVED',
+            'ORDER_ACCEPTED',
+            'MEASUREMENTS_VERIFIED',
+            'IN_PRODUCTION',
+            'READY_FOR_TRIAL',
+            'READY_FOR_DELIVERY',
+            'COMPLETED'
+        ];
+
+        async function initPage() {
+            currentUser = requireAuth();
+            if (!currentUser) return;
+
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('id');
+            if (!orderId) {
+                showToast('No order specified', 'error');
+                window.location.href = 'orders.html';
+                return;
+            }
+
+            if (currentUser.role === 'ADMIN') {
+                document.getElementById('back-link').href = 'admin.html';
+                document.getElementById('master-action-panel').style.display = 'block';
+            }
+
+            await loadOrder(orderId);
+        }
+
+        async function loadOrder(orderId) {
+            try {
+                currentOrder = await apiCall(`/orders/${orderId}/details`);
+                renderOrder(currentOrder);
+            } catch (err) {
+                showToast('Failed to load order: ' + err.message, 'error');
+            }
+        }
+
+        function renderOrder(o) {
+            document.getElementById('order-title').innerText = `Tailoring Job #${o.id.substring(o.id.length - 6)}`;
+            const dateStr = o.orderDate ? new Date(o.orderDate).toLocaleString() : 'N/A';
+            document.getElementById('order-subtitle').innerText = `Placed on ${dateStr} &bull; Client: ${o.customerName || 'Customer'}`;
+
+            // Status Badge
+            const badge = document.getElementById('current-status-badge');
+            const cleanStatus = (o.status || 'DESIGN_RECEIVED').replace(/_/g, ' ');
+            badge.innerText = cleanStatus;
+            badge.className = `status-badge ${(o.status || 'pending').toLowerCase()}`;
+
+            // Stepper update
+            updateStepper(o.status);
+
+            // Garment Specs
+            document.getElementById('spec-garment-badge').innerText = o.garmentType || 'Garment';
+            document.getElementById('spec-garment').innerText = o.garmentType || '-';
+            document.getElementById('spec-color').innerText = o.color || 'Standard';
+            document.getElementById('spec-collar').innerText = o.collarStyle || 'Standard';
+            document.getElementById('spec-sleeve').innerText = o.sleeveStyle || 'Standard';
+            document.getElementById('spec-pocket').innerText = o.pocketStyle || 'Standard';
+            document.getElementById('spec-price').innerText = `\u20B9 ${o.price || 0}`;
+
+            if (o.specialInstructions) {
+                document.getElementById('spec-instructions').innerText = o.specialInstructions;
+            }
+
+            if (o.masterNotes) {
+                document.getElementById('master-notes-display').innerText = o.masterNotes;
+                document.getElementById('master-notes-input').value = o.masterNotes;
+            }
+
+            // Measurements
+            if (o.measurement) {
+                document.getElementById('m-val-chest').innerText = `${o.measurement.chest || '-'} "`;
+                document.getElementById('m-val-shoulder').innerText = `${o.measurement.shoulder || '-'} "`;
+                document.getElementById('m-val-sleeve').innerText = `${o.measurement.sleeve || '-'} "`;
+                document.getElementById('m-val-waist').innerText = `${o.measurement.waist || '-'} "`;
+                document.getElementById('m-val-length').innerText = `${o.measurement.length || '-'} "`;
+            }
+
+            // Customer
+            document.getElementById('cust-name').innerText = o.customerName || '-';
+            document.getElementById('cust-email').innerText = o.customerEmail || '-';
+            document.getElementById('cust-phone').innerText = o.customerPhone || 'Not provided';
+            document.getElementById('cust-id').innerText = o.userId || '-';
+
+            // Image
+            if (o.designImageUrl && o.designImageUrl.trim() !== '') {
+                document.getElementById('design-img-tag').src = o.designImageUrl;
+                document.getElementById('design-img-tag').style.display = 'inline-block';
+                document.getElementById('no-img-text').style.display = 'none';
+            } else {
+                document.getElementById('design-img-tag').style.display = 'none';
+                document.getElementById('no-img-text').style.display = 'block';
+            }
+
+            // Admin dropdown
+            if (document.getElementById('master-status-select')) {
+                document.getElementById('master-status-select').value = o.status || 'DESIGN_RECEIVED';
+            }
+        }
+
+        function updateStepper(currentStatus) {
+            let activeIdx = STAGES.indexOf(currentStatus);
+            if (currentStatus === 'IN_PROGRESS') activeIdx = STAGES.indexOf('IN_PRODUCTION');
+            if (currentStatus === 'PENDING') activeIdx = 0;
+            if (currentStatus === 'DELIVERED') activeIdx = STAGES.length - 1;
+
+            STAGES.forEach((stage, idx) => {
+                const el = document.getElementById(`step-${stage}`);
+                if (!el) return;
+                el.className = 'status-step';
+                const dot = el.querySelector('.step-dot');
+
+                if (idx < activeIdx) {
+                    el.classList.add('completed');
+                    dot.innerHTML = '&#10003;';
+                } else if (idx === activeIdx) {
+                    el.classList.add('current');
+                    dot.innerHTML = (idx + 1).toString();
+                } else {
+                    dot.innerHTML = (idx + 1).toString();
+                }
+            });
+        }
+
+        async function quickUpdateStatus(status) {
+            await submitStatusChange(status);
+        }
+
+        async function submitStatusChange(status) {
+            try {
+                await apiCall(`/orders/${currentOrder.id}/status`, 'PUT', { status });
+                showToast(`Status updated to ${status.replace(/_/g, ' ')}`, 'success');
+                await loadOrder(currentOrder.id);
+            } catch (err) {
+                showToast('Failed to update status: ' + err.message, 'error');
+            }
+        }
+
+        async function saveMasterNotes() {
+            const notes = document.getElementById('master-notes-input').value;
+            try {
+                await apiCall(`/orders/${currentOrder.id}/notes`, 'PUT', { notes });
+                showToast('Master notes saved', 'success');
+                await loadOrder(currentOrder.id);
+            } catch (err) {
+                showToast('Failed to save notes: ' + err.message, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

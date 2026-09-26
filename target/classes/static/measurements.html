@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Measurements - TailorCraft</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">My Measurements</h1>
+                <p class="page-subtitle">Record and manage your tailored sizing specifications in inches (in)</p>
+            </div>
+        </div>
+
+        <!-- Form & Guide Layout -->
+        <div class="measurement-grid-layout" style="margin-bottom: 3rem;">
+            <!-- Real Tailoring Form -->
+            <div class="panel" style="margin-bottom: 0;">
+                <div class="panel-header">
+                    <h3 class="panel-title" id="form-heading">Record Sizing Specification</h3>
+                    <button type="button" id="reset-form-btn" onclick="resetFormToNew()" class="btn btn-outline btn-sm" style="display:none;">New Entry</button>
+                </div>
+
+                <form id="measurement-form">
+                    <input type="hidden" id="measurement-id">
+
+                    <div class="form-group">
+                        <label class="form-label" for="garment-type">Garment Category</label>
+                        <select id="garment-type" class="form-select" required>
+                            <option value="Shirt">Shirt (Formal / Casual)</option>
+                            <option value="Pant">Pant / Trousers / Chinos</option>
+                            <option value="Kurta">Kurta / Ethnic Wear</option>
+                            <option value="Suit">Three-Piece Suit / Blazer</option>
+                            <option value="Other">Other Custom Garment</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="m-chest">Chest / Bust <span class="unit">(inches)</span></label>
+                            <input type="number" step="0.1" id="m-chest" class="form-input" placeholder="e.g. 39.5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="m-shoulder">Shoulder Width <span class="unit">(inches)</span></label>
+                            <input type="number" step="0.1" id="m-shoulder" class="form-input" placeholder="e.g. 17.5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="m-sleeve">Sleeve Length <span class="unit">(inches)</span></label>
+                            <input type="number" step="0.1" id="m-sleeve" class="form-input" placeholder="e.g. 24.5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="m-waist">Waist Circumference <span class="unit">(inches)</span></label>
+                            <input type="number" step="0.1" id="m-waist" class="form-input" placeholder="e.g. 32.0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="m-length">Full Garment Length <span class="unit">(inches)</span></label>
+                        <input type="number" step="0.1" id="m-length" class="form-input" placeholder="e.g. 29.0" required>
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+                        <button type="submit" id="save-btn" class="btn btn-gold btn-block">Save Measurement Profile</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tailor Measuring Advice & Visual -->
+            <div class="measure-guide-box">
+                <h4>Measuring Guide & Reference</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                    For the most comfortable fit, measure over light undergarments using a flexible tailoring measuring tape.
+                </p>
+
+                <!-- Clean Tailoring Measuring SVG Diagram -->
+                <div style="text-align:center; margin:1.25rem 0; padding:1rem; background:white; border:1px solid var(--cream-border); border-radius:var(--radius-sm);">
+                    <svg viewBox="0 0 200 240" width="160" height="190" style="display:inline-block;">
+                        <!-- Mannequin Outline -->
+                        <path d="M70,40 Q100,50 130,40 L145,70 L135,120 L130,190 L70,190 L65,120 L55,70 Z" fill="#f8fafc" stroke="#1e283d" stroke-width="2"/>
+                        <!-- Shoulder Line -->
+                        <line x1="55" y1="70" x2="145" y2="70" stroke="#b58934" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="100" y="65" text-anchor="middle" font-size="9" fill="#b58934" font-weight="bold">Shoulder</text>
+                        <!-- Chest Line -->
+                        <line x1="60" y1="95" x2="140" y2="95" stroke="#b58934" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="100" y="90" text-anchor="middle" font-size="9" fill="#b58934" font-weight="bold">Chest</text>
+                        <!-- Waist Line -->
+                        <line x1="65" y1="125" x2="135" y2="125" stroke="#b58934" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="100" y="120" text-anchor="middle" font-size="9" fill="#b58934" font-weight="bold">Waist</text>
+                        <!-- Length Indicator -->
+                        <line x1="45" y1="70" x2="45" y2="190" stroke="#1e283d" stroke-width="1.5"/>
+                        <polyline points="42,76 45,70 48,76" fill="none" stroke="#1e283d" stroke-width="1.5"/>
+                        <polyline points="42,184 45,190 48,184" fill="none" stroke="#1e283d" stroke-width="1.5"/>
+                        <text x="38" y="135" text-anchor="end" font-size="9" fill="#1e283d">Length</text>
+                    </svg>
+                </div>
+
+                <div class="measure-tip-item">
+                    <span class="bullet">&bull;</span>
+                    <div><strong>Chest:</strong> Wrap tape under armpits around the fullest part of your chest.</div>
+                </div>
+                <div class="measure-tip-item">
+                    <span class="bullet">&bull;</span>
+                    <div><strong>Shoulder:</strong> Measure from tip of left shoulder bone across to right shoulder bone.</div>
+                </div>
+                <div class="measure-tip-item">
+                    <span class="bullet">&bull;</span>
+                    <div><strong>Waist:</strong> Measure at natural waistline, typically an inch above navel.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Measurements List -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3 class="panel-title">Saved Measurement Sets</h3>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">All saved configurations linked to your customer profile</p>
+                </div>
+            </div>
+
+            <div id="measurements-list-container" class="measurements-container">
+                <div style="text-align:center; color:var(--text-muted); grid-column:1/-1; padding:2rem;">
+                    Loading your measurements...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">TailorCraft &bull; Online Tailoring Management System</div>
+            <div class="footer-note">College Project &bull; Spring Boot + MongoDB</div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+        let measurementsList = [];
+
+        async function initPage() {
+            currentUser = requireAuth();
+            if (!currentUser) return;
+            await loadMeasurements();
+        }
+
+        async function loadMeasurements() {
+            try {
+                measurementsList = await apiCall(`/measurements/user/${currentUser.id}`);
+                renderCards(measurementsList);
+            } catch (err) {
+                showToast('Failed to load measurements: ' + err.message, 'error');
+            }
+        }
+
+        function renderCards(list) {
+            const container = document.getElementById('measurements-list-container');
+            if (!list || list.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; grid-column:1/-1; padding:2.5rem 1rem; color:var(--text-muted);">
+                        <p style="margin-bottom:0.5rem; font-size:1rem; color:var(--navy-dark); font-weight:600;">No measurements saved yet</p>
+                        <p>Fill out the form above to record your first tailoring profile.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(m => `
+                <div class="measurement-card">
+                    <div class="measurement-card-header">
+                        <div>
+                            <span class="garment-badge">${m.garmentType}</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted); margin-left:0.5rem; font-family:monospace;">#${m.id.substring(m.id.length - 6)}</span>
+                        </div>
+                        <div style="display:flex; gap:0.4rem;">
+                            <button onclick="editMeasurement('${m.id}')" class="btn btn-outline btn-sm" title="Edit">&#9998; Edit</button>
+                            <button onclick="deleteMeasurement('${m.id}')" class="btn btn-danger-outline btn-sm" title="Delete">&#128465;</button>
+                        </div>
+                    </div>
+
+                    <table class="measure-specs-table">
+                        <tr><td>Chest Circumference</td><td class="val">${m.chest}"</td></tr>
+                        <tr><td>Shoulder Width</td><td class="val">${m.shoulder}"</td></tr>
+                        <tr><td>Sleeve Length</td><td class="val">${m.sleeve}"</td></tr>
+                        <tr><td>Waist Circumference</td><td class="val">${m.waist}"</td></tr>
+                        <tr><td>Garment Length</td><td class="val">${m.length}"</td></tr>
+                    </table>
+
+                    <a href="orders.html?measurementId=${m.id}&garment=${encodeURIComponent(m.garmentType)}" class="btn btn-primary btn-sm btn-block">&#129697; Order with this size</a>
+                </div>
+            `).join('');
+        }
+
+        function editMeasurement(id) {
+            const item = measurementsList.find(m => m.id === id);
+            if (!item) return;
+
+            document.getElementById('form-heading').innerText = `Update ${item.garmentType} Specification`;
+            document.getElementById('measurement-id').value = item.id;
+            document.getElementById('garment-type').value = item.garmentType;
+            document.getElementById('m-chest').value = item.chest;
+            document.getElementById('m-shoulder').value = item.shoulder;
+            document.getElementById('m-sleeve').value = item.sleeve;
+            document.getElementById('m-waist').value = item.waist;
+            document.getElementById('m-length').value = item.length;
+
+            document.getElementById('save-btn').innerText = 'Update Sizing Specification';
+            document.getElementById('reset-form-btn').style.display = 'inline-block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFormToNew() {
+            document.getElementById('form-heading').innerText = 'Record Sizing Specification';
+            document.getElementById('measurement-id').value = '';
+            document.getElementById('measurement-form').reset();
+            document.getElementById('save-btn').innerText = 'Save Measurement Profile';
+            document.getElementById('reset-form-btn').style.display = 'none';
+        }
+
+        document.getElementById('measurement-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('measurement-id').value;
+            const payload = {
+                userId: currentUser.id,
+                garmentType: document.getElementById('garment-type').value,
+                chest: parseFloat(document.getElementById('m-chest').value),
+                shoulder: parseFloat(document.getElementById('m-shoulder').value),
+                sleeve: parseFloat(document.getElementById('m-sleeve').value),
+                waist: parseFloat(document.getElementById('m-waist').value),
+                length: parseFloat(document.getElementById('m-length').value)
+            };
+
+            try {
+                if (id) {
+                    await apiCall(`/measurements/${id}`, 'PUT', payload);
+                    showToast('Measurement specification updated', 'success');
+                } else {
+                    await apiCall('/measurements', 'POST', payload);
+                    showToast('Measurement specification saved', 'success');
+                }
+                resetFormToNew();
+                await loadMeasurements();
+            } catch (err) {
+                showToast('Failed to save: ' + err.message, 'error');
+            }
+        });
+
+        async function deleteMeasurement(id) {
+            if (!confirm('Are you sure you want to remove this measurement set?')) return;
+            try {
+                await apiCall(`/measurements/${id}`, 'DELETE');
+                showToast('Measurement deleted', 'info');
+                await loadMeasurements();
+            } catch (err) {
+                showToast('Failed to delete: ' + err.message, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - TailorCraft</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <!-- Dashboard Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title" id="welcome-header">Welcome back</h1>
+                <p class="page-subtitle">Your bespoke tailoring atelier & custom design space</p>
+            </div>
+            <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+                <a href="custom-design.html" class="btn btn-gold btn-sm">&#9986; Create Custom Design</a>
+                <a href="measurements.html" class="btn btn-outline btn-sm">&#43; Add Measurement</a>
+                <button onclick="openModal('edit-profile-modal')" class="btn btn-outline btn-sm">Edit Profile</button>
+            </div>
+        </div>
+
+        <!-- Prominent Custom Design Studio CTA Banner -->
+        <div class="custom-design-banner">
+            <div>
+                <span class="hero-tagline" style="color:var(--gold-border);">Bespoke Atelier Studio</span>
+                <h2>Design Your Dream Garment</h2>
+                <p>Choose collar styles, sleeves, pocket cuts, fabric shades, and upload your design sketch for the master tailor.</p>
+            </div>
+            <div>
+                <a href="custom-design.html" class="btn btn-gold" style="padding:0.85rem 1.6rem; font-size:0.95rem;">
+                    &#9986; Create Custom Design &rarr;
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 1: Active Tailoring Job Status -->
+        <div id="active-order-container">
+            <!-- Populated via JavaScript -->
+        </div>
+
+        <!-- Section 2: Recent Custom Designs Grid -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3 class="panel-title">&#129697; Recent Custom Designs & Submissions</h3>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">Your personalized design orders submitted to the master tailor</p>
+                </div>
+                <a href="custom-design.html" class="btn btn-outline btn-sm">&#43; New Design</a>
+            </div>
+
+            <div id="recent-designs-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.25rem;">
+                <div style="text-align:center; grid-column:1/-1; padding:2rem; color:var(--text-muted);">
+                    Loading recent designs...
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Saved Measurement Profiles -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3 class="panel-title">Saved Tailoring Measurements</h3>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">Your stored sizing specifications in inches (in)</p>
+                </div>
+                <a href="measurements.html" class="btn btn-outline btn-sm">Manage Measurements &rarr;</a>
+            </div>
+
+            <div class="tailor-table-container">
+                <table class="tailor-table">
+                    <thead>
+                        <tr>
+                            <th>Garment Type</th>
+                            <th>Chest (in)</th>
+                            <th>Shoulder (in)</th>
+                            <th>Sleeve (in)</th>
+                            <th>Waist (in)</th>
+                            <th>Length (in)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-measurements-tbody">
+                        <tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:1.5rem;">Loading measurements...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 4: All Order Records -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3 class="panel-title">All Tailoring Orders</h3>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">Complete history of active and completed bespoke jobs</p>
+                </div>
+                <a href="orders.html" class="btn btn-outline btn-sm">View Full Order Table &rarr;</a>
+            </div>
+
+            <div class="tailor-table-container">
+                <table class="tailor-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Garment</th>
+                            <th>Color / Style</th>
+                            <th>Order Date</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-orders-tbody">
+                        <tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:1.5rem;">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Edit Profile -->
+    <div id="edit-profile-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Edit Profile Information</h3>
+                <button onclick="closeModal('edit-profile-modal')" class="close-btn">&times;</button>
+            </div>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">Full Name</label>
+                    <input type="text" id="edit-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-phone">Phone Number</label>
+                    <input type="tel" id="edit-phone" class="form-input" required>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+                    <button type="button" onclick="closeModal('edit-profile-modal')" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">TailorCraft &bull; Online Tailoring Management System</div>
+            <div class="footer-note">College Project &bull; Spring Boot + MongoDB</div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+
+        async function loadDashboard() {
+            currentUser = requireAuth();
+            if (!currentUser) return;
+
+            document.getElementById('welcome-header').innerText = `Welcome back, ${currentUser.name}`;
+
+            try {
+                const [measurements, orders] = await Promise.all([
+                    apiCall(`/measurements/user/${currentUser.id}`),
+                    apiCall(`/orders/user/${currentUser.id}`)
+                ]);
+
+                renderActiveOrderBanner(orders);
+                renderRecentDesigns(orders);
+                renderMeasurementsTable(measurements);
+                renderOrdersTable(orders);
+            } catch (err) {
+                showToast('Failed to load dashboard: ' + err.message, 'error');
+            }
+        }
+
+        function renderActiveOrderBanner(orders) {
+            const container = document.getElementById('active-order-container');
+            const activeOrder = orders && orders.find(o => o.status !== 'COMPLETED' && o.status !== 'DELIVERED' && o.status !== 'REJECTED');
+
+            if (!activeOrder) {
+                container.innerHTML = `
+                    <div class="active-order-banner" style="background:#1b2438;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                            <div>
+                                <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold-border);">Atelier Studio</span>
+                                <h3>No Active Tailoring Orders</h3>
+                                <p>Create a custom garment design or choose styling details to begin a bespoke tailoring job.</p>
+                            </div>
+                            <a href="custom-design.html" class="btn btn-gold btn-sm">&#9986; Start New Design</a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const cleanStatus = (activeOrder.status || 'DESIGN_RECEIVED').replace(/_/g, ' ');
+
+            container.innerHTML = `
+                <div class="active-order-banner">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold-border);">Active Stitching Job</span>
+                            <h3>${activeOrder.garmentType} ${activeOrder.color ? `(${activeOrder.color})` : ''}</h3>
+                            <p>Order #${activeOrder.id.substring(activeOrder.id.length - 6)} &bull; Price: \u20B9 ${activeOrder.price || 0}</p>
+                        </div>
+                        <div style="display:flex; gap:0.5rem; align-items:center;">
+                            <span class="status-badge ${(activeOrder.status || 'pending').toLowerCase()}">${cleanStatus}</span>
+                            <a href="order-details.html?id=${activeOrder.id}" class="btn btn-outline btn-sm" style="color:white; border-color:#4a5c80;">View Full Specs &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRecentDesigns(orders) {
+            const grid = document.getElementById('recent-designs-grid');
+            if (!orders || orders.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align:center; grid-column:1/-1; padding:2rem; color:var(--text-muted);">
+                        No custom designs submitted yet. <a href="custom-design.html" style="font-weight:600;">Create your first design now &rarr;</a>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = orders.slice(0, 3).map(o => {
+                const imgTag = o.designImageUrl 
+                    ? `<img src="${o.designImageUrl}" style="width:100%; height:130px; object-fit:cover; border-radius:4px; margin-bottom:0.75rem;">`
+                    : `<div style="height:100px; background:var(--cream-subtle); display:flex; align-items:center; justify-content:center; border-radius:4px; margin-bottom:0.75rem; color:var(--text-muted); font-size:1.5rem;">&#9986;</div>`;
+
+                return `
+                    <div class="panel" style="padding:1.25rem; margin-bottom:0; background:white;">
+                        ${imgTag}
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                            <strong style="color:var(--navy-dark);">${o.garmentType}</strong>
+                            <span class="status-badge ${(o.status || 'pending').toLowerCase()}">${(o.status || 'DESIGN_RECEIVED').replace(/_/g, ' ')}</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                            Color: ${o.color || 'Standard'} &bull; Collar: ${o.collarStyle || 'Standard'}
+                        </p>
+                        <a href="order-details.html?id=${o.id}" class="btn btn-outline btn-sm btn-block">Inspect Design & Order &rarr;</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMeasurementsTable(measurements) {
+            const tbody = document.getElementById('dashboard-measurements-tbody');
+            if (!measurements || measurements.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:1.5rem; color:var(--text-muted);">
+                            No measurements recorded yet. <a href="measurements.html" style="font-weight:600;">Add measurements</a>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = measurements.map(m => `
+                <tr>
+                    <td><strong>${m.garmentType}</strong></td>
+                    <td>${m.chest}"</td>
+                    <td>${m.shoulder}"</td>
+                    <td>${m.sleeve}"</td>
+                    <td>${m.waist}"</td>
+                    <td>${m.length}"</td>
+                    <td>
+                        <a href="custom-design.html" class="btn btn-outline btn-sm">&#9986; Design with this size</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderOrdersTable(orders) {
+            const tbody = document.getElementById('dashboard-orders-tbody');
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:1.5rem; color:var(--text-muted);">
+                            No past orders found. <a href="custom-design.html" style="font-weight:600;">Create a custom design</a>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = orders.map(o => {
+                const dateStr = o.orderDate ? new Date(o.orderDate).toLocaleDateString() : 'N/A';
+                return `
+                    <tr>
+                        <td style="font-family:monospace; font-weight:600; color:var(--navy-dark);">#${o.id.substring(o.id.length - 6)}</td>
+                        <td><strong>${o.garmentType}</strong></td>
+                        <td>${o.color || 'Standard'} &bull; ${o.collarStyle || 'Standard'}</td>
+                        <td>${dateStr}</td>
+                        <td style="font-weight:700; color:var(--navy-dark);">&#8377; ${o.price || 0}</td>
+                        <td><span class="status-badge ${(o.status || 'pending').toLowerCase()}">${(o.status || 'DESIGN_RECEIVED').replace(/_/g, ' ')}</span></td>
+                        <td>
+                            <a href="order-details.html?id=${o.id}" class="btn btn-outline btn-sm">View Details &rarr;</a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openEditProfileModal() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-phone').value = currentUser.phone || '';
+            openModal('edit-profile-modal');
+        }
+
+        document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('edit-name').value.trim();
+            const phone = document.getElementById('edit-phone').value.trim();
+
+            try {
+                const updated = await apiCall(`/users/${currentUser.id}`, 'PUT', { name, phone });
+                setCurrentUser(updated);
+                closeModal('edit-profile-modal');
+                showToast('Profile updated successfully', 'success');
+                loadDashboard();
+            } catch (err) {
+                showToast('Failed to update: ' + err.message, 'error');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Custom Design - TailorCraft</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Bespoke Design Studio</h1>
+                <p class="page-subtitle">Customize styling options, upload reference sketches, and submit your bespoke garment to the master tailor.</p>
+            </div>
+            <a href="dashboard.html" class="btn btn-outline btn-sm">&larr; Back to Dashboard</a>
+        </div>
+
+        <div class="design-studio-grid">
+            <!-- Left: Design & Customization Form -->
+            <div>
+                <form id="custom-design-form">
+                    <!-- Step 1: Garment Type -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">1. Garment Category</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="garment-type">Select Garment</label>
+                            <select id="garment-type" class="form-select" onchange="updateGarmentChoices(); updatePreview();" required>
+                                <option value="Formal Shirt" selected>Bespoke Formal Shirt</option>
+                                <option value="Kurta">Kurta / Ethnic Wear</option>
+                                <option value="Three-Piece Suit">Three-Piece Suit / Blazer</option>
+                                <option value="Trousers">Trousers / Chinos</option>
+                                <option value="Dress / Blouse">Dress / Designer Blouse</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Reference Image Upload -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3 class="panel-title">2. Design & Reference Image</h3>
+                                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.2rem;">Upload a photo, sketch, or design inspiration (JPG, PNG, WEBP)</p>
+                            </div>
+                        </div>
+
+                        <div class="upload-dropzone" onclick="document.getElementById('design-file-input').click()">
+                            <div style="font-size:2rem; margin-bottom:0.4rem; color:var(--gold-accent);">&#128247;</div>
+                            <strong style="display:block; color:var(--navy-dark); font-size:0.95rem;">Click to upload reference image</strong>
+                            <span style="font-size:0.8rem; color:var(--text-muted);">Supports JPG, PNG, WEBP (Max 10MB)</span>
+                            <input type="file" id="design-file-input" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="handleFileUpload(event)">
+                        </div>
+
+                        <input type="hidden" id="design-image-url">
+
+                        <div id="image-preview-wrapper" class="image-preview-box">
+                            <img id="image-preview-tag" src="" alt="Uploaded Design Preview">
+                            <div style="margin-top:0.5rem;">
+                                <button type="button" onclick="removeUploadedImage()" class="btn btn-danger-outline btn-sm">Remove Image</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Color & Fabric Shade -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">3. Fabric Color & Shade</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Choose Fabric Palette</label>
+                            <div class="color-swatch-grid" id="color-palette-group">
+                                <button type="button" class="color-swatch-btn selected" data-color="Royal Blue" onclick="selectColor(this, 'Royal Blue', '#1e3a8a')">
+                                    <span class="color-circle" style="background-color:#1e3a8a;"></span>
+                                    <span>Royal Blue</span>
+                                </button>
+                                <button type="button" class="color-swatch-btn" data-color="Crisp White" onclick="selectColor(this, 'Crisp White', '#ffffff')">
+                                    <span class="color-circle" style="background-color:#ffffff; border-color:#cbd5e1;"></span>
+                                    <span>Crisp White</span>
+                                </button>
+                                <button type="button" class="color-swatch-btn" data-color="Charcoal Navy" onclick="selectColor(this, 'Charcoal Navy', '#1e293b')">
+                                    <span class="color-circle" style="background-color:#1e293b;"></span>
+                                    <span>Charcoal Navy</span>
+                                </button>
+                                <button type="button" class="color-swatch-btn" data-color="Emerald Green" onclick="selectColor(this, 'Emerald Green', '#065f46')">
+                                    <span class="color-circle" style="background-color:#065f46;"></span>
+                                    <span>Emerald Green</span>
+                                </button>
+                                <button type="button" class="color-swatch-btn" data-color="Wine Crimson" onclick="selectColor(this, 'Wine Crimson', '#881337')">
+                                    <span class="color-circle" style="background-color:#881337;"></span>
+                                    <span>Wine Crimson</span>
+                                </button>
+                                <button type="button" class="color-swatch-btn" data-color="Ivory Sand" onclick="selectColor(this, 'Ivory Sand', '#fef3c7')">
+                                    <span class="color-circle" style="background-color:#fef3c7;"></span>
+                                    <span>Ivory Sand</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="selected-color" value="Royal Blue">
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Collar, Sleeves & Pockets -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">4. Tailoring Styling Details</h3>
+                        </div>
+
+                        <!-- Collar Style -->
+                        <div class="form-group">
+                            <label class="form-label">Collar Style</label>
+                            <div class="style-selector-group" id="collar-group">
+                                <div class="style-choice-card selected" onclick="selectStyleOption('collar', this, 'Classic Spread Collar')">
+                                    Classic Spread
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('collar', this, 'Mandarin / Nehru Collar')">
+                                    Mandarin / Nehru
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('collar', this, 'Bandhgala Stand Collar')">
+                                    Bandhgala Stand
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('collar', this, 'Button-Down Collar')">
+                                    Button-Down
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('collar', this, 'Round / Mandarin Neck')">
+                                    Round / Scoop
+                                </div>
+                            </div>
+                            <input type="hidden" id="selected-collar" value="Classic Spread Collar">
+                        </div>
+
+                        <!-- Sleeve Style -->
+                        <div class="form-group" style="margin-top:1.5rem;">
+                            <label class="form-label">Sleeve Style</label>
+                            <div class="style-selector-group" id="sleeve-group">
+                                <div class="style-choice-card selected" onclick="selectStyleOption('sleeve', this, 'Full Sleeve with French Cuff')">
+                                    Full Sleeve (Cuff)
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('sleeve', this, 'Full Sleeve Standard')">
+                                    Full Sleeve (Standard)
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('sleeve', this, 'Half Sleeve')">
+                                    Half Sleeve
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('sleeve', this, '3/4th Sleeve')">
+                                    3/4th Sleeve
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('sleeve', this, 'Sleeveless')">
+                                    Sleeveless
+                                </div>
+                            </div>
+                            <input type="hidden" id="selected-sleeve" value="Full Sleeve with French Cuff">
+                        </div>
+
+                        <!-- Pocket Style -->
+                        <div class="form-group" style="margin-top:1.5rem;">
+                            <label class="form-label">Pocket Configuration</label>
+                            <div class="style-selector-group" id="pocket-group">
+                                <div class="style-choice-card selected" onclick="selectStyleOption('pocket', this, 'Single Chest Pocket')">
+                                    Single Chest Pocket
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('pocket', this, 'No Pocket (Clean Front)')">
+                                    No Pocket
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('pocket', this, 'Double Flap Pockets')">
+                                    Double Flap Pockets
+                                </div>
+                                <div class="style-choice-card" onclick="selectStyleOption('pocket', this, 'Welt Pockets / Concealed')">
+                                    Welt / Side Slits
+                                </div>
+                            </div>
+                            <input type="hidden" id="selected-pocket" value="Single Chest Pocket">
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Measurements -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3 class="panel-title">5. Body Measurements</h3>
+                                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.2rem;">Choose from saved profiles or enter custom sizing below</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="measurement-source-select">Select Sizing Source</label>
+                            <select id="measurement-source-select" class="form-select" onchange="handleMeasurementSourceChange()">
+                                <option value="custom">Enter Custom Sizing Below</option>
+                            </select>
+                        </div>
+
+                        <div id="inline-measurements-fields">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="m-chest">Chest / Bust <span class="unit">(in)</span></label>
+                                    <input type="number" step="0.1" id="m-chest" class="form-input" placeholder="39.0" required onchange="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="m-shoulder">Shoulder Width <span class="unit">(in)</span></label>
+                                    <input type="number" step="0.1" id="m-shoulder" class="form-input" placeholder="17.0" required onchange="updatePreview()">
+                                </div>
+                            </div>
+
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="m-sleeve">Sleeve <span class="unit">(in)</span></label>
+                                    <input type="number" step="0.1" id="m-sleeve" class="form-input" placeholder="24.0" required onchange="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="m-waist">Waist <span class="unit">(in)</span></label>
+                                    <input type="number" step="0.1" id="m-waist" class="form-input" placeholder="32.0" required onchange="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="m-length">Length <span class="unit">(in)</span></label>
+                                    <input type="number" step="0.1" id="m-length" class="form-input" placeholder="29.0" required onchange="updatePreview()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Special Instructions -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">6. Tailor Instructions & Notes</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="special-instructions">Special Stitching Instructions</label>
+                            <textarea id="special-instructions" class="form-textarea" rows="3" placeholder="e.g., Contrast inner collar fabric, antique brass buttons, extra seam allowance on waistline..." oninput="updatePreview()"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-design-btn" class="btn btn-gold btn-block" style="padding:1rem; font-size:1.05rem;">
+                        &#129697; Submit Custom Design to Master Tailor
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Live Interactive Design Preview Panel -->
+            <div class="design-preview-panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Live Design Preview</h3>
+                    <span class="garment-badge" id="preview-badge">Shirt</span>
+                </div>
+
+                <div class="mockup-canvas">
+                    <div id="mockup-ref-img-wrap" style="display:none; margin-bottom:1rem;">
+                        <img id="mockup-ref-img" src="" style="max-height:160px; max-width:100%; border-radius:4px; object-fit:contain;" alt="Design Reference">
+                    </div>
+                    
+                    <div style="font-family:var(--font-serif); font-size:1.25rem; font-weight:700; color:var(--navy-dark);" id="preview-garment-title">
+                        Bespoke Formal Shirt
+                    </div>
+                    <div id="preview-color-pill" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; margin:0.4rem 0; padding:0.2rem 0.6rem; background:var(--cream-subtle); border-radius:4px;">
+                        <span id="preview-color-dot" class="color-circle" style="background:#1e3a8a;"></span>
+                        <span id="preview-color-text">Royal Blue</span>
+                    </div>
+
+                    <div style="margin-top:0.75rem; font-size:0.85rem; color:var(--text-secondary); text-align:left; border-top:1px solid var(--cream-border); padding-top:0.75rem;">
+                        <div>&bull; Collar: <strong id="preview-collar-text">Classic Spread</strong></div>
+                        <div>&bull; Sleeves: <strong id="preview-sleeve-text">Full Sleeve (Cuff)</strong></div>
+                        <div>&bull; Pockets: <strong id="preview-pocket-text">Single Chest Pocket</strong></div>
+                    </div>
+                </div>
+
+                <div style="background:var(--cream-subtle); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--cream-border); margin-bottom:1.25rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Estimated Tailoring Price:</span>
+                        <span id="preview-price" style="font-size:1.35rem; font-weight:800; color:var(--navy-dark);">&#8377; 450</span>
+                    </div>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">Includes pattern drafting, cutting, bespoke stitching, and trial verification.</p>
+                </div>
+
+                <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;">
+                    &#9989; <strong>Master Workflow:</strong> Upon submission, the master tailor will review your sketch, verify measurements, and update the status in real time.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">TailorCraft &bull; Online Tailoring Management System</div>
+            <div class="footer-note">College Project &bull; Spring Boot + MongoDB</div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+        let savedMeasurements = [];
+        let uploadedImageUrl = '';
+
+        async function initStudio() {
+            currentUser = requireAuth();
+            if (!currentUser) return;
+
+            try {
+                savedMeasurements = await apiCall(`/measurements/user/${currentUser.id}`);
+                populateSavedMeasurementsDropdown();
+            } catch (err) {
+                console.error(err);
+            }
+            updatePreview();
+        }
+
+        function populateSavedMeasurementsDropdown() {
+            const select = document.getElementById('measurement-source-select');
+            savedMeasurements.forEach(m => {
+                select.innerHTML += `<option value="${m.id}">${m.garmentType} Profile (Chest ${m.chest}", Shoulder ${m.shoulder}", Waist ${m.waist}")</option>`;
+            });
+        }
+
+        function handleMeasurementSourceChange() {
+            const select = document.getElementById('measurement-source-select');
+            const val = select.value;
+            if (val === 'custom') {
+                document.getElementById('m-chest').value = '';
+                document.getElementById('m-shoulder').value = '';
+                document.getElementById('m-sleeve').value = '';
+                document.getElementById('m-waist').value = '';
+                document.getElementById('m-length').value = '';
+            } else {
+                const match = savedMeasurements.find(m => m.id === val);
+                if (match) {
+                    document.getElementById('m-chest').value = match.chest;
+                    document.getElementById('m-shoulder').value = match.shoulder;
+                    document.getElementById('m-sleeve').value = match.sleeve;
+                    document.getElementById('m-waist').value = match.waist;
+                    document.getElementById('m-length').value = match.length;
+                }
+            }
+            updatePreview();
+        }
+
+        function selectColor(btn, colorName, hexCode) {
+            document.querySelectorAll('#color-palette-group .color-swatch-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('selected-color').value = colorName;
+            document.getElementById('preview-color-text').innerText = colorName;
+            document.getElementById('preview-color-dot').style.backgroundColor = hexCode;
+        }
+
+        function selectStyleOption(category, card, value) {
+            const group = document.getElementById(`${category}-group`);
+            group.querySelectorAll('.style-choice-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            document.getElementById(`selected-${category}`).value = value;
+            document.getElementById(`preview-${category}-text`).innerText = value;
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Instant client preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('image-preview-tag').src = e.target.result;
+                document.getElementById('image-preview-wrapper').style.display = 'block';
+                document.getElementById('mockup-ref-img').src = e.target.result;
+                document.getElementById('mockup-ref-img-wrap').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showToast('Uploading design reference...', 'info');
+                const res = await fetch('/api/orders/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok && data.imageUrl) {
+                    uploadedImageUrl = data.imageUrl;
+                    document.getElementById('design-image-url').value = data.imageUrl;
+                    showToast('Design reference uploaded successfully!', 'success');
+                } else {
+                    // Fallback to data URL
+                    uploadedImageUrl = document.getElementById('image-preview-tag').src;
+                    document.getElementById('design-image-url').value = uploadedImageUrl;
+                }
+            } catch (err) {
+                // Fallback to Base64 data URI
+                uploadedImageUrl = document.getElementById('image-preview-tag').src;
+                document.getElementById('design-image-url').value = uploadedImageUrl;
+            }
+        }
+
+        function removeUploadedImage() {
+            uploadedImageUrl = '';
+            document.getElementById('design-image-url').value = '';
+            document.getElementById('design-file-input').value = '';
+            document.getElementById('image-preview-wrapper').style.display = 'none';
+            document.getElementById('mockup-ref-img-wrap').style.display = 'none';
+            showToast('Image removed', 'info');
+        }
+
+        function updateGarmentChoices() {
+            const g = document.getElementById('garment-type').value;
+            let basePrice = 500;
+            if (g.includes('Shirt')) basePrice = 450;
+            else if (g.includes('Pant') || g.includes('Trouser')) basePrice = 550;
+            else if (g.includes('Suit')) basePrice = 2500;
+            else if (g.includes('Kurta')) basePrice = 600;
+            else if (g.includes('Dress')) basePrice = 700;
+
+            document.getElementById('preview-price').innerHTML = `&#8377; ${basePrice}`;
+        }
+
+        function updatePreview() {
+            const garment = document.getElementById('garment-type').value;
+            document.getElementById('preview-badge').innerText = garment;
+            document.getElementById('preview-garment-title').innerText = garment;
+            updateGarmentChoices();
+        }
+
+        document.getElementById('custom-design-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-design-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting Design to Master...';
+
+            const garmentType = document.getElementById('garment-type').value;
+            const color = document.getElementById('selected-color').value;
+            const collarStyle = document.getElementById('selected-collar').value;
+            const sleeveStyle = document.getElementById('selected-sleeve').value;
+            const pocketStyle = document.getElementById('selected-pocket').value;
+            const specialInstructions = document.getElementById('special-instructions').value;
+            const designImageUrl = document.getElementById('design-image-url').value || uploadedImageUrl;
+
+            const selectedMId = document.getElementById('measurement-source-select').value;
+            let measurementId = selectedMId !== 'custom' ? selectedMId : null;
+
+            const customMeasurements = {
+                garmentType: garmentType,
+                chest: parseFloat(document.getElementById('m-chest').value) || 0,
+                shoulder: parseFloat(document.getElementById('m-shoulder').value) || 0,
+                sleeve: parseFloat(document.getElementById('m-sleeve').value) || 0,
+                waist: parseFloat(document.getElementById('m-waist').value) || 0,
+                length: parseFloat(document.getElementById('m-length').value) || 0
+            };
+
+            const payload = {
+                userId: currentUser.id,
+                garmentType: garmentType,
+                measurementId: measurementId,
+                designImageUrl: designImageUrl,
+                color: color,
+                collarStyle: collarStyle,
+                sleeveStyle: sleeveStyle,
+                pocketStyle: pocketStyle,
+                specialInstructions: specialInstructions,
+                customMeasurements: customMeasurements
+            };
+
+            try {
+                const createdOrder = await apiCall('/orders', 'POST', payload);
+                showToast('Custom design submitted to Master Tailor!', 'success');
+                setTimeout(() => {
+                    window.location.href = `order-details.html?id=${createdOrder.id}`;
+                }, 700);
+            } catch (err) {
+                showToast('Failed to submit design: ' + err.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit Custom Design to Master Tailor';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initStudio);
+    </script>
+</body>
+</html>
